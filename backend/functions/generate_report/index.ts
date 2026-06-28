@@ -37,10 +37,17 @@ serve(async (req) => {
       if (error) throw error;
       data = rows;
     } else if (report_type === "results") {
-      const { data: rows, error } = await supabaseAdmin
+      let query = supabaseAdmin
         .from("results")
-        .select("subject, marks_obtained, total_marks, grade, exams(name, term), students(student_code, users(full_name))")
-        .eq(student_id ? "student_id" : "exam_id", student_id ?? class_id);
+        .select("subject, marks_obtained, total_marks, grade, exams!inner(name, term, class_id), students(student_code, users(full_name))");
+
+      if (student_id) {
+        query = query.eq("student_id", student_id);
+      } else if (class_id) {
+        query = query.eq("exams.class_id", class_id);
+      }
+
+      const { data: rows, error } = await query;
       if (error) throw error;
       data = rows;
     } else {

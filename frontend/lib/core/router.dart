@@ -62,12 +62,28 @@ final routerProvider = Provider<GoRouter>((ref) {
       // Not authenticated → always send to login
       if (!isLoggedIn) return onLogin ? null : AppRoutes.login;
 
+      final role = roleAsync.value;
+
+      // If role is still loading, wait on current route.
+      if (role == null) return null;
+
       // Authenticated but still on login → redirect to role dashboard
       if (onLogin) {
-        final role = roleAsync.value;
         if (role == 'admin')   return AppRoutes.adminDashboard;
         if (role == 'teacher') return AppRoutes.teacherDashboard;
         if (role == 'student') return AppRoutes.studentDashboard;
+      }
+
+      // Enforce role-based guards
+      final location = state.matchedLocation;
+      if (location.startsWith('/admin') && role != 'admin') {
+        return role == 'teacher' ? AppRoutes.teacherDashboard : AppRoutes.studentDashboard;
+      }
+      if (location.startsWith('/teacher') && role != 'teacher') {
+        return role == 'admin' ? AppRoutes.adminDashboard : AppRoutes.studentDashboard;
+      }
+      if (location.startsWith('/student') && role != 'student') {
+        return role == 'admin' ? AppRoutes.adminDashboard : AppRoutes.teacherDashboard;
       }
 
       return null; // no redirect

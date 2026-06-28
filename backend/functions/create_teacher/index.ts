@@ -47,12 +47,17 @@ serve(async (req) => {
     });
     if (createError) throw createError;
 
-    // 2. Wait for trigger to insert into public.users, then insert into teachers
+    // 2. Wait for trigger to insert into public.users, then fetch the public user id
+    const { data: publicUser, error: publicUserError } = await supabaseAdmin
+      .from("users")
+      .select("id")
+      .eq("auth_user_id", newUser.user!.id)
+      .single();
+    if (publicUserError || !publicUser) throw publicUserError ?? new Error("User record not found");
+
+    // 3. Insert teacher record
     const { error: teacherError } = await supabaseAdmin.from("teachers").insert({
-      user_id: (await supabaseAdmin.from("users")
-        .select("id")
-        .eq("auth_user_id", newUser.user!.id)
-        .single()).data!.id,
+      user_id: publicUser.id,
       teacher_code,
       subject,
       joining_date,

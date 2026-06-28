@@ -1,0 +1,14 @@
+{
+  "name": "mehmoodah-os-functions",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev:create_student": "tsx create_student/index.ts"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.0.0"
+  },
+  "devDependencies": {
+    "tsx": "^4.22.4"
+  }
+}

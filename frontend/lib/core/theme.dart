@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // ---------------------------------------------------------------------------
 // Mehmoodah Academy Design System – Color Tokens
@@ -209,3 +210,6 @@ class AppTheme {
         ),
       );
 }
+
+// Dynamic state management for ThemeMode
+final themeModeProvider = StateProvider<ThemeMode>((ref) => ThemeMode.light);

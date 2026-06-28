@@ -1,0 +1,45 @@
+# ── Node / TypeScript ─────────────────────────────────────────────────────────
+node_modules/
+dist/
+*.js.map
+*.d.ts.map
+
+# ── Flutter / Dart ────────────────────────────────────────────────────────────
+**/build/
+**/.dart_tool/
+**/.flutter-plugins
+**/.flutter-plugins-dependencies
+**/.pub-cache/
+**/.pub/
+**/pubspec.lock
+**/flutter_export_environment.sh
+.packages
+.fvm/
+
+# ── Supabase local ────────────────────────────────────────────────────────────
+.supabase/
+supabase/.branches/
+supabase/.temp/
+
+# ── Environment secrets (NEVER commit these) ──────────────────────────────────
+.env
+.env.*
+*.env
+!.env.example
+
+# ── OS / Editor ───────────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+.vscode/settings.json
+.idea/
+
+# ── Generated images / temp files ─────────────────────────────────────────────
+*.png
+*.jpg
+*.jpeg
+*.gif
+!frontend/assets/**
+
+# ── Logs ──────────────────────────────────────────────────────────────────────
+*.log
+npm-debug.log*

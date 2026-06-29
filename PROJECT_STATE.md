@@ -38,19 +38,31 @@
 | `frontend/lib/modules/auth/auth_notifier.dart` | ✅ Complete — signIn, signOut, resetPassword |
 | `frontend/lib/shared/widgets/dashboard_shell.dart` | ✅ Complete — collapsible sidebar (desktop), bottom nav + drawer (mobile), topbar, role menus, theme toggle, user profile popup |
 
-### Frontend Screens (partially done)
+### Phase 3 — Admin Providers (100% done)
+| File | Status |
+|------|--------|
+| `frontend/lib/modules/students/students_provider.dart` | ✅ Complete — classesProvider + studentsProvider; CRUD + Edge Function calls + soft-delete |
+| `frontend/lib/modules/teachers/teachers_provider.dart` | ✅ Complete — teachersProvider; CRUD + Edge Function calls + class assignments + soft-delete |
+| `frontend/lib/modules/dashboard/admin_dashboard_provider.dart` | ✅ Complete — adminStatsProvider (counts) + announcementsProvider (feed + create) |
+
+### Phase 4 — Timetable Providers (100% done)
+| File | Status |
+|------|--------|
+| `frontend/lib/modules/timetable/timetable_provider.dart` | ✅ Complete — classManagementProvider (CRUD + soft-delete) + timetableProvider (slots CRUD) + allTeachersProvider |
+
+### Frontend Screens
 | File | Status |
 |------|--------|
 | `frontend/lib/modules/auth/login_page.dart` | ✅ Complete — split-screen layout, form validation, loading state, forgot password dialog |
-| `frontend/lib/modules/dashboard/admin_dashboard.dart` | ✅ Complete |
+| `frontend/lib/modules/dashboard/admin_dashboard.dart` | ✅ Complete — stat cards, quick action buttons, announcements feed + create dialog |
 | `frontend/lib/modules/dashboard/teacher_dashboard.dart` | ❌ Placeholder only |
 | `frontend/lib/modules/dashboard/student_dashboard.dart` | ❌ Placeholder only |
-| `frontend/lib/modules/students/students_page.dart` | ✅ Complete |
-| `frontend/lib/modules/teachers/teachers_page.dart` | ✅ Complete |
+| `frontend/lib/modules/students/students_page.dart` | ✅ Complete — searchable table/cards, class filter, add/edit/delete dialogs, Edge Function registration |
+| `frontend/lib/modules/teachers/teachers_page.dart` | ✅ Complete — card grid, add/edit/delete dialogs, multi-class assignment modal |
 | `frontend/lib/modules/attendance/attendance_page.dart` | ❌ Placeholder only |
 | `frontend/lib/modules/results/results_page.dart` | ❌ Placeholder only |
 | `frontend/lib/modules/assignments/assignments_page.dart` | ❌ Placeholder only |
-| `frontend/lib/modules/timetable/timetable_page.dart` | ❌ Placeholder only |
+| `frontend/lib/modules/timetable/timetable_page.dart` | ✅ Complete — tabbed page: Classes management table + Weekly timetable with real-time overlap detection |
 | `frontend/lib/modules/reports/reports_page.dart` | ❌ Placeholder only |
 | `frontend/lib/modules/profile/profile_page.dart` | ❌ Placeholder only |
 
@@ -58,17 +70,8 @@
 
 ## ❌ REMAINING WORK (in order)
 
-### Phase 3 — Admin: Students & Teachers UI
-- `students_page.dart` — searchable data table, add/edit/delete dialog, class filter, calls `create_student` edge function
-- `teachers_page.dart` — card grid, add/edit dialog, class assignment modal, calls `create_teacher` edge function
-- `admin_dashboard.dart` — stat cards (total students, teachers, classes), recent announcements
-
-### Phase 4 — Class & Timetable
-- Class list/create screen (inline in admin area or separate page)
-- `timetable_page.dart` — weekly grid view, slot picker, overlap validation UI
-
 ### Phase 5 — Teacher Operations
-- `attendance_page.dart` — class selector, student roster with Present/Absent/Late/Leave toggle per student, save button
+- `attendance_page.dart` — class selector, student roster with Present/Absent/Late/Leave toggle per student, submit/save button
 - `results_page.dart` — exam selector, marks input table, publish button (calls `publish_results` edge function)
 - `assignments_page.dart` — create assignment form with file upload, submissions list with grading inputs
 - `teacher_dashboard.dart` — today's attendance summary, pending assignments to grade
@@ -160,15 +163,17 @@ flutter run -d chrome
 | `805cb7f` | Fix report data filtering mismatch and add router role guards |
 | `c376061` | Implement high-fidelity responsive login screen |
 | `afcb0b6` | Implement Phase 3: Admin Students, Teachers, and Dashboard UI |
+| `f761ce6` | Implement Phase 4: Class and Timetable management UI with real-time overlap validation |
 
 ---
 
 ## ⚡ NEXT SESSION: Start Here
 
-**Tell the AI**: *"Read PROJECT_STATE.md in the repo root and continue from Phase 4."*
+**Tell the AI**: *"Read PROJECT_STATE.md in the repo root and continue from Phase 5."*
 
 The AI should:
 1. Read this file
-2. Start with Class list/creation and `timetable_page.dart`
-3. Wrap every screen in `DashboardShell`
-4. Commit after each screen
+2. Start with Teacher operations: `attendance_page.dart`, `results_page.dart`, `assignments_page.dart`, `teacher_dashboard.dart`
+3. Note that `attendance_page.dart`, `results_page.dart`, `assignments_page.dart` are **role-aware** — they render different UIs for teachers vs students. Use `ref.watch(userRoleProvider)` to detect the role inside each page.
+4. Wrap every screen in `DashboardShell`
+5. Commit after each screen

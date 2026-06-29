@@ -42,11 +42,11 @@
 | File | Status |
 |------|--------|
 | `frontend/lib/modules/auth/login_page.dart` | ✅ Complete — split-screen layout, form validation, loading state, forgot password dialog |
-| `frontend/lib/modules/dashboard/admin_dashboard.dart` | ❌ Placeholder only |
+| `frontend/lib/modules/dashboard/admin_dashboard.dart` | ✅ Complete |
 | `frontend/lib/modules/dashboard/teacher_dashboard.dart` | ❌ Placeholder only |
 | `frontend/lib/modules/dashboard/student_dashboard.dart` | ❌ Placeholder only |
-| `frontend/lib/modules/students/students_page.dart` | ❌ Placeholder only |
-| `frontend/lib/modules/teachers/teachers_page.dart` | ❌ Placeholder only |
+| `frontend/lib/modules/students/students_page.dart` | ✅ Complete |
+| `frontend/lib/modules/teachers/teachers_page.dart` | ✅ Complete |
 | `frontend/lib/modules/attendance/attendance_page.dart` | ❌ Placeholder only |
 | `frontend/lib/modules/results/results_page.dart` | ❌ Placeholder only |
 | `frontend/lib/modules/assignments/assignments_page.dart` | ❌ Placeholder only |
@@ -159,16 +159,16 @@ flutter run -d chrome
 | `f773d82` | Fix import paths and improve Edge Function error handling |
 | `805cb7f` | Fix report data filtering mismatch and add router role guards |
 | `c376061` | Implement high-fidelity responsive login screen |
+| `afcb0b6` | Implement Phase 3: Admin Students, Teachers, and Dashboard UI |
 
 ---
 
 ## ⚡ NEXT SESSION: Start Here
 
-**Tell the AI**: *"Read PROJECT_STATE.md in the repo root and continue from Phase 3."*
+**Tell the AI**: *"Read PROJECT_STATE.md in the repo root and continue from Phase 4."*
 
 The AI should:
 1. Read this file
-2. List the 12 placeholder files
-3. Start with `admin_dashboard.dart`, `students_page.dart`, `teachers_page.dart`
-4. Wrap every screen in `DashboardShell`
-5. Commit after each screen
+2. Start with Class list/creation and `timetable_page.dart`
+3. Wrap every screen in `DashboardShell`
+4. Commit after each screen

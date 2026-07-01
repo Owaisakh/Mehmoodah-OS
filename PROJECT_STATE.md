@@ -50,18 +50,29 @@
 |------|--------|
 | `frontend/lib/modules/timetable/timetable_provider.dart` | ✅ Complete — classManagementProvider (CRUD + soft-delete) + timetableProvider (slots CRUD) + allTeachersProvider |
 
+### Phase 5 — Teacher Operations (100% done)
+| File | Status |
+|------|--------|
+| `frontend/lib/modules/attendance/attendance_provider.dart` | ✅ Complete — teacherClassesProvider, classStudentsProvider, existingAttendanceProvider, AttendanceDraft StateNotifier, AttendanceSubmit, studentMonthlyAttendance |
+| `frontend/lib/modules/attendance/attendance_page.dart` | ✅ Complete — role-aware: teacher roster view (mark P/A/Late/Leave, bulk mark, upsert), student monthly calendar (colour-coded, % stats) |
+| `frontend/lib/modules/results/results_provider.dart` | ✅ Complete — teacherExamsProvider, ExamCreation, ResultsDraft, ResultsSave + publishResults edge call, studentResultsProvider |
+| `frontend/lib/modules/results/results_page.dart` | ✅ Complete — role-aware: teacher marks table + save/publish, student grouped published results with grade chips |
+| `frontend/lib/modules/assignments/assignments_provider.dart` | ✅ Complete — teacherAssignments, assignmentSubmissions, AssignmentCreation, SubmissionGrade, studentAssignments, studentSubmissions, SubmissionNotifier |
+| `frontend/lib/modules/assignments/assignments_page.dart` | ✅ Complete — role-aware: teacher tab (list + grade submissions bottom sheet), student homework cards (submit link dialog, grade/feedback display) |
+| `frontend/lib/modules/dashboard/teacher_dashboard.dart` | ✅ Complete — today's attendance summary bar, quick-action gradient cards, my-classes chips, pending-submissions list |
+
 ### Frontend Screens
 | File | Status |
 |------|--------|
 | `frontend/lib/modules/auth/login_page.dart` | ✅ Complete — split-screen layout, form validation, loading state, forgot password dialog |
 | `frontend/lib/modules/dashboard/admin_dashboard.dart` | ✅ Complete — stat cards, quick action buttons, announcements feed + create dialog |
-| `frontend/lib/modules/dashboard/teacher_dashboard.dart` | ❌ Placeholder only |
+| `frontend/lib/modules/dashboard/teacher_dashboard.dart` | ✅ Complete — today's attendance summary, quick actions, class chips, pending grades list |
 | `frontend/lib/modules/dashboard/student_dashboard.dart` | ❌ Placeholder only |
 | `frontend/lib/modules/students/students_page.dart` | ✅ Complete — searchable table/cards, class filter, add/edit/delete dialogs, Edge Function registration |
 | `frontend/lib/modules/teachers/teachers_page.dart` | ✅ Complete — card grid, add/edit/delete dialogs, multi-class assignment modal |
-| `frontend/lib/modules/attendance/attendance_page.dart` | ❌ Placeholder only |
-| `frontend/lib/modules/results/results_page.dart` | ❌ Placeholder only |
-| `frontend/lib/modules/assignments/assignments_page.dart` | ❌ Placeholder only |
+| `frontend/lib/modules/attendance/attendance_page.dart` | ✅ Complete — role-aware: teacher roster + student calendar |
+| `frontend/lib/modules/results/results_page.dart` | ✅ Complete — role-aware: teacher marks entry + student published results |
+| `frontend/lib/modules/assignments/assignments_page.dart` | ✅ Complete — role-aware: teacher create/grade + student submit/view |
 | `frontend/lib/modules/timetable/timetable_page.dart` | ✅ Complete — tabbed page: Classes management table + Weekly timetable with real-time overlap detection |
 | `frontend/lib/modules/reports/reports_page.dart` | ❌ Placeholder only |
 | `frontend/lib/modules/profile/profile_page.dart` | ❌ Placeholder only |
@@ -70,11 +81,7 @@
 
 ## ❌ REMAINING WORK (in order)
 
-### Phase 5 — Teacher Operations
-- `attendance_page.dart` — class selector, student roster with Present/Absent/Late/Leave toggle per student, submit/save button
-- `results_page.dart` — exam selector, marks input table, publish button (calls `publish_results` edge function)
-- `assignments_page.dart` — create assignment form with file upload, submissions list with grading inputs
-- `teacher_dashboard.dart` — today's attendance summary, pending assignments to grade
+### ~~Phase 5 — Teacher Operations~~ ✅ COMPLETE
 
 ### Phase 6 — Student Portal
 - `student_dashboard.dart` — attendance % widget, announcements feed, upcoming homework alerts
@@ -169,11 +176,15 @@ flutter run -d chrome
 
 ## ⚡ NEXT SESSION: Start Here
 
-**Tell the AI**: *"Read PROJECT_STATE.md in the repo root and continue from Phase 5."*
+**Tell the AI**: *"Read PROJECT_STATE.md in the repo root and continue from Phase 6."*
 
 The AI should:
 1. Read this file
-2. Start with Teacher operations: `attendance_page.dart`, `results_page.dart`, `assignments_page.dart`, `teacher_dashboard.dart`
-3. Note that `attendance_page.dart`, `results_page.dart`, `assignments_page.dart` are **role-aware** — they render different UIs for teachers vs students. Use `ref.watch(userRoleProvider)` to detect the role inside each page.
+2. Start with **Phase 6 — Student Portal**:
+   - `student_dashboard.dart` — attendance % widget, announcements feed, upcoming homework alerts
+   - `attendance_page.dart` (already done — student calendar view is built)
+   - `results_page.dart` (already done — student published results view is built)
+   - `assignments_page.dart` (already done — student homework view is built)
+3. Then move to **Phase 7 — System Utilities**: `reports_page.dart`, `profile_page.dart`
 4. Wrap every screen in `DashboardShell`
 5. Commit after each screen

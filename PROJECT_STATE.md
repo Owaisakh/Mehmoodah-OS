@@ -74,8 +74,8 @@
 | `frontend/lib/modules/results/results_page.dart` | ✅ Complete — role-aware: teacher marks entry + student published results |
 | `frontend/lib/modules/assignments/assignments_page.dart` | ✅ Complete — role-aware: teacher create/grade + student submit/view |
 | `frontend/lib/modules/timetable/timetable_page.dart` | ✅ Complete — tabbed page: Classes management table + Weekly timetable with real-time overlap detection |
-| `frontend/lib/modules/reports/reports_page.dart` | ❌ Placeholder only |
-| `frontend/lib/modules/profile/profile_page.dart` | ❌ Placeholder only |
+| `frontend/lib/modules/reports/reports_page.dart` | ✅ Complete — Segmented analytics, custom charts (attendance rings, grade distribution bars), filters, CSV exports |
+| `frontend/lib/modules/profile/profile_page.dart` | ✅ Complete — profile edit (name, phone), change password, theme mode switch, role metadata |
 
 ---
 
@@ -85,10 +85,7 @@
 
 ### ~~Phase 6 — Student Portal~~ ✅ COMPLETE
 
-### Phase 7 — System Utilities
-- Announcements module (create widget for admin, read-only feed on dashboards)
-- `reports_page.dart` — charts (attendance rate, grade distribution), CSV/PDF export actions
-- `profile_page.dart` — user info display, password reset trigger, theme preference toggle
+### ~~Phase 7 — System Utilities~~ ✅ COMPLETE
 
 ### Phase 8 — Polish
 - Skeleton loading states for all data tables and lists
@@ -172,12 +169,14 @@ flutter run -d chrome
 
 ## ⚡ NEXT SESSION: Start Here
 
-**Tell the AI**: *"Read PROJECT_STATE.md in the repo root and continue from Phase 7."*
+**Tell the AI**: *"Read PROJECT_STATE.md in the repo root and continue from Phase 8."*
 
 The AI should:
 1. Read this file
-2. Start with **Phase 7 — System Utilities**:
-   - `reports_page.dart` — charts (attendance rate, grade distribution), CSV/PDF export actions
-   - `profile_page.dart` — user info display, password reset trigger, theme preference toggle
-3. Wrap every screen in `DashboardShell`
-4. Commit after each screen
+2. Start with **Phase 8 — Polish**:
+   - Add skeleton loading states for data tables/lists.
+   - Design empty state illustration graphics/icons.
+   - Run responsive layout checking and adjustments.
+   - Standardize error boundary widgets.
+3. Wrap screens in `DashboardShell` when modifying layout boundaries.
+4. Commit after polishing changes.

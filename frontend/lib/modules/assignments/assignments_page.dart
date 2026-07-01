@@ -3,6 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/supabase.dart';
 import '../../core/theme.dart';
 import '../../shared/widgets/dashboard_shell.dart';
+import '../../shared/widgets/empty_state.dart';
+import '../../shared/widgets/skeleton_loading.dart';
+import '../../shared/widgets/error_boundary.dart';
 import '../attendance/attendance_provider.dart';
 import 'assignments_provider.dart';
 
@@ -83,16 +86,22 @@ class _AssignmentsPageState extends ConsumerState<AssignmentsPage>
     return RefreshIndicator(
       onRefresh: () async => ref.invalidate(teacherAssignmentsProvider),
       child: assignmentsAsync.when(
-        loading: () => const Center(child: CircularProgressIndicator()),
-        error: (e, _) => Center(child: Text('Error: $e')),
+        loading: () => const Padding(
+          padding: EdgeInsets.all(24.0),
+          child: SkeletonListLoader(itemCount: 4),
+        ),
+        error: (e, _) => AppErrorState(
+          errorMessage: 'Error loading assignments: $e',
+          onRetry: () => ref.invalidate(teacherAssignmentsProvider),
+        ),
         data: (assignments) {
           return Stack(
             children: [
               if (assignments.isEmpty)
-                _emptyState(
+                const AppEmptyState(
                   icon: Icons.assignment_outlined,
-                  message: 'No assignments created yet.',
-                  subtext: 'Tap the + button to create your first assignment.',
+                  title: 'No Assignments',
+                  description: 'You have not created any assignments yet. Tap the button below to add one.',
                 )
               else
                 ListView.separated(
@@ -517,13 +526,20 @@ class _AssignmentsPageState extends ConsumerState<AssignmentsPage>
     final assignmentsAsync = ref.watch(teacherAssignmentsProvider);
 
     return assignmentsAsync.when(
-      loading: () => const Center(child: CircularProgressIndicator()),
-      error: (e, _) => Center(child: Text('Error: $e')),
+      loading: () => const Padding(
+        padding: EdgeInsets.all(24.0),
+        child: SkeletonListLoader(itemCount: 4),
+      ),
+      error: (e, _) => AppErrorState(
+        errorMessage: 'Error loading submissions: $e',
+        onRetry: () => ref.invalidate(teacherAssignmentsProvider),
+      ),
       data: (assignments) {
         if (assignments.isEmpty) {
-          return _emptyState(
+          return const AppEmptyState(
             icon: Icons.assignment_turned_in_outlined,
-            message: 'No assignments to grade yet.',
+            title: 'No Work to Grade',
+            description: 'There are no assignments with student submissions to review yet.',
           );
         }
         return ListView.separated(
@@ -745,14 +761,23 @@ class _AssignmentsPageState extends ConsumerState<AssignmentsPage>
         ref.invalidate(studentSubmissionsProvider);
       },
       child: assignmentsAsync.when(
-        loading: () => const Center(child: CircularProgressIndicator()),
-        error: (e, _) => Center(child: Text('Error: $e')),
+        loading: () => const Padding(
+          padding: EdgeInsets.all(24.0),
+          child: SkeletonListLoader(itemCount: 4),
+        ),
+        error: (e, _) => AppErrorState(
+          errorMessage: 'Error loading homework: $e',
+          onRetry: () {
+            ref.invalidate(studentAssignmentsProvider);
+            ref.invalidate(studentSubmissionsProvider);
+          },
+        ),
         data: (assignments) {
           if (assignments.isEmpty) {
-            return _emptyState(
+            return const AppEmptyState(
               icon: Icons.homework_rounded,
-              message: 'No assignments yet.',
-              subtext: 'Your teacher hasn\'t posted any homework.',
+              title: 'No Homework Posted',
+              description: 'You are completely caught up! No homework has been posted.',
             );
           }
 
@@ -1023,32 +1048,5 @@ class _AssignmentsPageState extends ConsumerState<AssignmentsPage>
     );
   }
 
-  Widget _emptyState(
-      {required IconData icon, required String message, String? subtext}) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(48),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(icon,
-                size: 72,
-                color: isDark ? AppColors.darkBorder : AppColors.borderLight),
-            const SizedBox(height: 20),
-            Text(message,
-                style: AppTextStyles.heading3.copyWith(
-                  color: isDark ? AppColors.textMuted : AppColors.textSecondary,
-                ),
-                textAlign: TextAlign.center),
-            if (subtext != null) ...[
-              const SizedBox(height: 8),
-              Text(subtext,
-                  style: AppTextStyles.bodyMedium, textAlign: TextAlign.center),
-            ],
-          ],
-        ),
-      ),
-    );
   }
 }

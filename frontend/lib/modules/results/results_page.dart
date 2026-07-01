@@ -3,6 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/supabase.dart';
 import '../../core/theme.dart';
 import '../../shared/widgets/dashboard_shell.dart';
+import '../../shared/widgets/empty_state.dart';
+import '../../shared/widgets/skeleton_loading.dart';
+import '../../shared/widgets/error_boundary.dart';
 import '../attendance/attendance_provider.dart';
 import 'results_provider.dart';
 
@@ -38,12 +41,21 @@ class _ResultsPageState extends ConsumerState<ResultsPage> {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return classesAsync.when(
-      loading: () => const Center(child: CircularProgressIndicator()),
-      error: (e, _) => Center(child: Text('Error: $e')),
+      loading: () => const Padding(
+        padding: EdgeInsets.all(24.0),
+        child: SkeletonListLoader(itemCount: 3),
+      ),
+      error: (e, _) => AppErrorState(
+        errorMessage: 'Error loading classes: $e',
+        onRetry: () => ref.invalidate(teacherClassesProvider),
+      ),
       data: (classes) {
         if (classes.isEmpty) {
-          return _emptyState(
-              icon: Icons.class_outlined, message: 'No classes assigned.');
+          return const AppEmptyState(
+            icon: Icons.class_outlined,
+            title: 'No Classes Assigned',
+            description: 'You are not assigned to any classes as a teacher.',
+          );
         }
 
         if (_selectedClassId == null && classes.isNotEmpty) {
@@ -202,12 +214,24 @@ class _ResultsPageState extends ConsumerState<ResultsPage> {
     final saveState = ref.watch(resultsSaveProvider);
 
     return studentsAsync.when(
-      loading: () => const Center(child: CircularProgressIndicator()),
-      error: (e, _) => Text('Error: $e'),
+      loading: () => const Padding(
+        padding: EdgeInsets.symmetric(vertical: 16.0),
+        child: SkeletonListLoader(itemCount: 4),
+      ),
+      error: (e, _) => AppErrorState(
+        errorMessage: 'Error loading roster: $e',
+        onRetry: () => ref.invalidate(classStudentsProvider(_selectedClassId!)),
+      ),
       data: (students) {
         return existingResultsAsync.when(
-          loading: () => const Center(child: CircularProgressIndicator()),
-          error: (e, _) => Text('Error loading results: $e'),
+          loading: () => const Padding(
+            padding: EdgeInsets.symmetric(vertical: 16.0),
+            child: SkeletonTableLoader(rows: 4),
+          ),
+          error: (e, _) => AppErrorState(
+            errorMessage: 'Error loading results: $e',
+            onRetry: () => ref.invalidate(examResultsProvider(_selectedExamId!)),
+          ),
           data: (existing) {
             if (!_marksLoaded) {
               WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -534,14 +558,20 @@ class _ResultsPageState extends ConsumerState<ResultsPage> {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return resultsAsync.when(
-      loading: () => const Center(child: CircularProgressIndicator()),
-      error: (e, _) => Center(child: Text('Error: $e')),
+      loading: () => const Padding(
+        padding: EdgeInsets.all(24.0),
+        child: SkeletonTableLoader(rows: 4),
+      ),
+      error: (e, _) => AppErrorState(
+        errorMessage: 'Error loading results: $e',
+        onRetry: () => ref.invalidate(studentResultsProvider),
+      ),
       data: (results) {
         if (results.isEmpty) {
-          return _emptyState(
+          return const AppEmptyState(
             icon: Icons.grade_outlined,
-            message: 'No published results yet.',
-            subtext: 'Your teacher hasn\'t published any exam results.',
+            title: 'No Results Published',
+            description: 'Your teacher has not published any exam results for you yet.',
           );
         }
 
@@ -817,33 +847,5 @@ class _ResultsPageState extends ConsumerState<ResultsPage> {
     );
   }
 
-  Widget _emptyState(
-      {required IconData icon, required String message, String? subtext}) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(48),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(icon,
-                size: 72,
-                color: isDark ? AppColors.darkBorder : AppColors.borderLight),
-            const SizedBox(height: 20),
-            Text(message,
-                style: AppTextStyles.heading3.copyWith(
-                  color: isDark ? AppColors.textMuted : AppColors.textSecondary,
-                ),
-                textAlign: TextAlign.center),
-            if (subtext != null) ...[
-              const SizedBox(height: 8),
-              Text(subtext,
-                  style: AppTextStyles.bodyMedium,
-                  textAlign: TextAlign.center),
-            ],
-          ],
-        ),
-      ),
-    );
   }
 }

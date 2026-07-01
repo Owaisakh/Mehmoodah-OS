@@ -5,6 +5,8 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'core/router.dart';
 import 'core/theme.dart';
 
+import 'shared/widgets/error_boundary.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   usePathUrlStrategy();
@@ -38,6 +40,9 @@ class MehmoodahAcademyApp extends ConsumerWidget {
       darkTheme: AppTheme.darkTheme,
       themeMode: themeMode,
       routerConfig: router,
+      builder: (context, child) => AppErrorBoundary(
+        child: child ?? const SizedBox(),
+      ),
     );
   }
 }

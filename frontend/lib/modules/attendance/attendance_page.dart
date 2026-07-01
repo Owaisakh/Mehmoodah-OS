@@ -3,6 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/supabase.dart';
 import '../../core/theme.dart';
 import '../../shared/widgets/dashboard_shell.dart';
+import '../../shared/widgets/empty_state.dart';
+import '../../shared/widgets/skeleton_loading.dart';
+import '../../shared/widgets/error_boundary.dart';
 import 'attendance_provider.dart';
 
 class AttendancePage extends ConsumerStatefulWidget {
@@ -42,14 +45,20 @@ class _AttendancePageState extends ConsumerState<AttendancePage> {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return classesAsync.when(
-      loading: () => const Center(child: CircularProgressIndicator()),
-      error: (e, _) => Center(child: Text('Error: $e')),
+      loading: () => const Padding(
+        padding: EdgeInsets.all(24.0),
+        child: SkeletonListLoader(itemCount: 4),
+      ),
+      error: (e, _) => AppErrorState(
+        errorMessage: 'Error loading classes: $e',
+        onRetry: () => ref.invalidate(teacherClassesProvider),
+      ),
       data: (classes) {
         if (classes.isEmpty) {
-          return _buildEmptyState(
+          return const AppEmptyState(
             icon: Icons.class_outlined,
-            message: 'No classes assigned to you.',
-            subtext: 'Contact your administrator to assign classes.',
+            title: 'No Classes Assigned',
+            description: 'No classes are assigned to you. Contact your administrator.',
           );
         }
 
@@ -218,13 +227,20 @@ class _AttendancePageState extends ConsumerState<AttendancePage> {
     });
 
     return studentsAsync.when(
-      loading: () => const Center(child: CircularProgressIndicator()),
-      error: (e, _) => Center(child: Text('Error loading students: $e')),
+      loading: () => const Padding(
+        padding: EdgeInsets.symmetric(vertical: 24.0),
+        child: SkeletonListLoader(itemCount: 5),
+      ),
+      error: (e, _) => AppErrorState(
+        errorMessage: 'Error loading student roster: $e',
+        onRetry: () => ref.invalidate(classStudentsProvider(_selectedClassId!)),
+      ),
       data: (students) {
         if (students.isEmpty) {
-          return _buildEmptyState(
+          return const AppEmptyState(
             icon: Icons.people_outline,
-            message: 'No students enrolled in this class.',
+            title: 'No Students Found',
+            description: 'There are no active students enrolled in this class.',
           );
         }
 
@@ -450,13 +466,20 @@ class _AttendancePageState extends ConsumerState<AttendancePage> {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return classesAsync.when(
-      loading: () => const Center(child: CircularProgressIndicator()),
-      error: (e, _) => Center(child: Text('Error: $e')),
+      loading: () => const Padding(
+        padding: EdgeInsets.all(24.0),
+        child: SkeletonListLoader(itemCount: 2),
+      ),
+      error: (e, _) => AppErrorState(
+        errorMessage: 'Error loading profile: $e',
+        onRetry: () => ref.invalidate(studentClassesProvider),
+      ),
       data: (classes) {
         if (classes.isEmpty) {
-          return _buildEmptyState(
+          return const AppEmptyState(
             icon: Icons.class_outlined,
-            message: 'You are not enrolled in any class.',
+            title: 'No Enrollment Found',
+            description: 'You are not enrolled in any class currently. Contact administration.',
           );
         }
 
@@ -560,8 +583,16 @@ class _AttendancePageState extends ConsumerState<AttendancePage> {
     ));
 
     return attendanceAsync.when(
-      loading: () => const Center(child: CircularProgressIndicator()),
-      error: (e, _) => Center(child: Text('Error: $e')),
+      loading: () => const Padding(
+        padding: EdgeInsets.all(24.0),
+        child: SkeletonTableLoader(rows: 4),
+      ),
+      error: (e, _) => AppErrorState(
+        errorMessage: 'Error loading attendance: $e',
+        onRetry: () => ref.invalidate(studentMonthlyAttendanceProvider(
+          (classId: classId, year: _calendarYear, month: _calendarMonth),
+        )),
+      ),
       data: (records) {
         final statusMap = <int, String>{};
         for (final r in records) {
@@ -782,34 +813,5 @@ class _AttendancePageState extends ConsumerState<AttendancePage> {
     );
   }
 
-  Widget _buildEmptyState({
-    required IconData icon,
-    required String message,
-    String? subtext,
-  }) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(48),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(icon, size: 72, color: isDark ? AppColors.darkBorder : AppColors.borderLight),
-            const SizedBox(height: 20),
-            Text(
-              message,
-              style: AppTextStyles.heading3.copyWith(
-                color: isDark ? AppColors.textMuted : AppColors.textSecondary,
-              ),
-              textAlign: TextAlign.center,
-            ),
-            if (subtext != null) ...[
-              const SizedBox(height: 8),
-              Text(subtext, style: AppTextStyles.bodyMedium, textAlign: TextAlign.center),
-            ],
-          ],
-        ),
-      ),
-    );
   }
 }

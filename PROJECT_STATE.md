@@ -67,7 +67,7 @@
 | `frontend/lib/modules/auth/login_page.dart` | ✅ Complete — split-screen layout, form validation, loading state, forgot password dialog |
 | `frontend/lib/modules/dashboard/admin_dashboard.dart` | ✅ Complete — stat cards, quick action buttons, announcements feed + create dialog |
 | `frontend/lib/modules/dashboard/teacher_dashboard.dart` | ✅ Complete — today's attendance summary, quick actions, class chips, pending grades list |
-| `frontend/lib/modules/dashboard/student_dashboard.dart` | ❌ Placeholder only |
+| `frontend/lib/modules/dashboard/student_dashboard.dart` | ✅ Complete — welcome card, attendance rate circle, upcoming homework alerts, recent announcements feed |
 | `frontend/lib/modules/students/students_page.dart` | ✅ Complete — searchable table/cards, class filter, add/edit/delete dialogs, Edge Function registration |
 | `frontend/lib/modules/teachers/teachers_page.dart` | ✅ Complete — card grid, add/edit/delete dialogs, multi-class assignment modal |
 | `frontend/lib/modules/attendance/attendance_page.dart` | ✅ Complete — role-aware: teacher roster + student calendar |
@@ -83,11 +83,7 @@
 
 ### ~~Phase 5 — Teacher Operations~~ ✅ COMPLETE
 
-### Phase 6 — Student Portal
-- `student_dashboard.dart` — attendance % widget, announcements feed, upcoming homework alerts
-- `attendance_page.dart` (student view) — read-only monthly attendance calendar
-- `results_page.dart` (student view) — published exam results with grade chips
-- `assignments_page.dart` (student view) — homework list, file submission uploader
+### ~~Phase 6 — Student Portal~~ ✅ COMPLETE
 
 ### Phase 7 — System Utilities
 - Announcements module (create widget for admin, read-only feed on dashboards)
@@ -176,15 +172,12 @@ flutter run -d chrome
 
 ## ⚡ NEXT SESSION: Start Here
 
-**Tell the AI**: *"Read PROJECT_STATE.md in the repo root and continue from Phase 6."*
+**Tell the AI**: *"Read PROJECT_STATE.md in the repo root and continue from Phase 7."*
 
 The AI should:
 1. Read this file
-2. Start with **Phase 6 — Student Portal**:
-   - `student_dashboard.dart` — attendance % widget, announcements feed, upcoming homework alerts
-   - `attendance_page.dart` (already done — student calendar view is built)
-   - `results_page.dart` (already done — student published results view is built)
-   - `assignments_page.dart` (already done — student homework view is built)
-3. Then move to **Phase 7 — System Utilities**: `reports_page.dart`, `profile_page.dart`
-4. Wrap every screen in `DashboardShell`
-5. Commit after each screen
+2. Start with **Phase 7 — System Utilities**:
+   - `reports_page.dart` — charts (attendance rate, grade distribution), CSV/PDF export actions
+   - `profile_page.dart` — user info display, password reset trigger, theme preference toggle
+3. Wrap every screen in `DashboardShell`
+4. Commit after each screen
